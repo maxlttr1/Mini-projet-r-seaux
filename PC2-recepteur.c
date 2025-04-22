@@ -47,10 +47,10 @@ int main (int argc, char **argv)
 	priseReception = creePriseReception(PORT_RECEPTEUR);
 	
 	printf("Je recois \n");
-	printf("Touche d pour demarrer...\n");
+	printf("Touche d pour démarrer...\n");
   	while (getchar() != 'd'); /* temporisation */
 
-	printf("PC2 demarre ...\n\n");
+	printf("PC2 démarre ...\n\n");
 
 	/*boucle en reception*/
 	do

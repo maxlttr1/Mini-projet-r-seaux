@@ -39,7 +39,7 @@ int main (int argc, char **argv)
 	envoie(priseEmission, buffer, strlen(buffer));
 	/* ex. remplissage 1er paquet puis emission */
 
-	printf("PC1 demarre ...\n\n");
+	printf("PC1 démarre ...\n\n");
 
 	/* boucle en emission */
 	
