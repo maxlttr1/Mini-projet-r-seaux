@@ -7,19 +7,10 @@ Les 2 PC sont virtuels et échangent via la boucle locale en mode non connecté 
 
 ## Compilation :
 ```bash
-make [cible]
+make all
 ```
 
 ## Usage : 
-
-Il faut lancer les 2 PC dans 2 terminaux différents :
-
 ```bash
-./PC2-recepteur
-./PC1-emetteur
+./host
 ```
-
-Puis faire démarrer d'abord le PC2 (qui reçoit) avant le PC1 (qui envoie "nouveauBlabla")
-
---> pour arrêter les programmes faire CTRL-C 
-
