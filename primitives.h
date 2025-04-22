@@ -1,10 +1,6 @@
 /*
  * primitives.h
  * Prototypes des primitives UDP
- *
- * Travaux Pratiques réseau SILR 1
- * Nicolas Normand
- * 1999-2001
  */
 
 #include <sys/types.h>

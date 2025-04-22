@@ -63,8 +63,8 @@ int main (int argc, char **argv)
 
 		traitePaquet(&p);
 
-	} while (1); /* boucle infinie */
+	} while (1);
 
-  return 0;
+	return 0;
 }
 

@@ -23,11 +23,11 @@ typedef struct paquet
 
 int main (int argc, char **argv)
 {
-	int    	priseEmission; //, priseReception;
-	char   	buffer[LONGUEUR_ADRESSE + LONGUEUR_MESSAGE];
-	//Paquet 	p;
+	int priseEmission; //, priseReception;
+	char buffer[LONGUEUR_ADRESSE + LONGUEUR_MESSAGE];
+	//Paquet p;
 	
-	int		sizeofbuffer;
+	int	sizeofbuffer;
 
 	priseEmission  = creePriseEmission(ADRESSE_RECEPTEUR, PORT_RECEPTEUR);
 
@@ -57,7 +57,7 @@ int main (int argc, char **argv)
 
 		envoie(priseEmission, buffer, strlen(buffer));
 
-	} while (1); /* boucle infinie */
+	} while (1);
 
 	return 0;
 }

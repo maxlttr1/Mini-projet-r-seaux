@@ -1,10 +1,6 @@
 /*
  * envoie.c
- * Émission d'un datagramme sur une socket UDP "connectée"
- *
- * Travaux Pratiques réseau SILR 1
- * Nicolas Normand
- * 1999-2001
+ * Emission d'un datagramme sur une socket UDP "connectÃ©e"
  */
 
 #include <unistd.h>

@@ -1,10 +1,6 @@
 /*
  * recoit.c
  * Attente d'un datagramme sur une socket UDP
- *
- * Travaux Pratiques réseau SILR 1
- * Nicolas Normand
- * 1999-2001
  */
 
 #include <unistd.h>
