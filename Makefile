@@ -20,7 +20,7 @@ SOURCES_ALL	= \
 	\
 	Makefile\
 	\
-	README.txt
+	README.md
 
 ARCHIVE_NAME = Exemple-PC1-emetteur-PC2-recepteur.tgz
 
