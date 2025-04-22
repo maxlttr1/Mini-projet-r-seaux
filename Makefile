@@ -24,7 +24,7 @@ SOURCES_ALL	= \
 
 ARCHIVE_NAME = Exemple-PC1-emetteur-PC2-recepteur.tgz
 
-all: PC1-emetteur PC2-recepteur primitives.a $(ARCHIVE_NAME) clean 
+all: PC1-emetteur PC2-recepteur host primitives.a $(ARCHIVE_NAME) clean 
 
 clean:
 	rm -f *.a *.o core
@@ -36,6 +36,9 @@ PC1-emetteur: PC1-emetteur.o primitives.a
 	$(CC) -o $@ $^
 
 PC2-recepteur: PC2-recepteur.o primitives.a
+	$(CC) -o $@ $^
+
+host: host.o primitives.a
 	$(CC) -o $@ $^
 
 primitives.a: envoie.o recoit.o creePriseEmission.o creePriseReception.o
