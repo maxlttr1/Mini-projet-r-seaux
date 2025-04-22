@@ -26,14 +26,14 @@ void traitePaquet(Paquet *p)
 	if (strcmp(ADRESSE_LOCALE, p->adresse) == 0)
 	/* si je suis le destinataire du paquet */
 	{
-		printf("Je suis le destinataire. \n");
-		printf("Le message qui m'est destine : %s \n\n", p->message);
+		printf("✅ Je suis le destinataire\n");
+		printf("📥 Le message qui m'est destine : %s \n\n", p->message);
 	
 	}
 	else
 		/* sinon */
-		printf("Je ne suis pas le destinataire. \n");
-		printf("Message pour %s : %s\n\n", p->adresse, p->message);
+		printf("❌ Je ne suis pas le destinataire\n");
+		printf("📥 Message pour %s : %s\n\n", p->adresse, p->message);
 }
 
 int main (int argc, char **argv) {
@@ -53,7 +53,7 @@ int main (int argc, char **argv) {
     while (1) {
         //if token available --> prompt for message or no 
         sprintf(buffer, "%15s%120s", ADRESSE_DISTANTE, "blablabla");
-        printf("J'envoie le paquet \n");
+        printf("📮 J'envoie le paquet\n");
         envoie(socketEmission, buffer, strlen(buffer));
 
         sleep(2);
