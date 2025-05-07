@@ -1,7 +1,11 @@
-all: main
+all: pc_test1 pc_test2
 CC = gcc
 
-main: src/main.c src/pc.c
+pc_test1: src/utils.c src/pc_test1.c
+	$(CC) -Wall -o $@.run $^
+
+
+pc_test2: src/utils.c src/pc_test2.c
 	$(CC) -Wall -o $@.run $^
 
 pc1: src/pc1.c
