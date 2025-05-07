@@ -22,5 +22,5 @@ int main() {
     fdu.addr_dest = port_S_suivant;
     strcpy(fdu.message, "Salut !");
 
-    config_socket(port_S_courant, port_S_suivant, hostname2);
+    config_socket(port_S_courant, port_S_suivant, hostname2, &fdu);
 }

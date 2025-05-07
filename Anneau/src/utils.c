@@ -15,11 +15,10 @@
 #include "../include/constants.h"
 #include "../include/FDU.h"
 
-void config_socket(int port_S_courant, int port_S_suivant, const char *pc_name) {
+void config_socket(int port_S_courant, int port_S_suivant, const char *pc_name, FDU *fdu) {
     int sock_C, sock_S;
     struct sockaddr_in sa_S_courant, sa_S_suivant, sa_S_precedent;
     unsigned int taille_sa;
-    char message[10] = "Salut";
     int nb_boucle = 1;
 
     // Taille de la structure sockaddr
@@ -58,7 +57,7 @@ void config_socket(int port_S_courant, int port_S_suivant, const char *pc_name) 
         printf("🚀 [%s] Sending first message\n", pc_name);
         fflush(stdout);
 
-        if (sendto(sock_C, message, 10 * sizeof(char), 0, (struct sockaddr *) &sa_S_suivant, taille_sa) < 0) {
+        if (sendto(sock_C, fdu, sizeof(FDU), 0, (struct sockaddr *) &sa_S_suivant, taille_sa) < 0) {
             perror("❌ sendto failed");
         } else {
             printf("✅ [%s] Message sent to next PC\n", pc_name);
@@ -71,18 +70,18 @@ void config_socket(int port_S_courant, int port_S_suivant, const char *pc_name) 
     while(1) {
         printf("🔄 [%s] Waiting for message...\n", pc_name);
         fflush(stdout);
-        int received = recvfrom(sock_S, message, 10 * sizeof(char), 0, (struct sockaddr *) &sa_S_precedent, &taille_sa);
+        int received = recvfrom(sock_S, fdu, sizeof(FDU), 0, (struct sockaddr *) &sa_S_precedent, &taille_sa);
         if (received < 0) {
             perror("❌ recvfrom failed");
         } else {
-            printf("📩 [%s] Received message from previous PC: %s\n", pc_name, message);
+            printf("📩 Received FDU from previous PC: Type: %d, Message: %s\n", fdu->type, fdu->message);
             fflush(stdout);
         }
 
         sleep(2);
         
         // Envoi vers PC suivant 
-        if (sendto(sock_C, message, 10 * sizeof(char), 0, (struct sockaddr *) &sa_S_suivant, taille_sa) < 0) {
+        if (sendto(sock_C, fdu, sizeof(FDU), 0, (struct sockaddr *) &sa_S_suivant, taille_sa) < 0) {
             perror("❌ sendto failed");
         } else {
             printf("✅ [%s] Message sent to next PC\n", pc_name);

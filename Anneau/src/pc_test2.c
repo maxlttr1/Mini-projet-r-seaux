@@ -16,5 +16,6 @@ int port_S_courant = host1;
 int port_S_suivant = host0;
 
 int main() {
-    config_socket(port_S_courant, port_S_suivant, hostname2);
+    FDU fdu;
+    config_socket(port_S_courant, port_S_suivant, hostname2, &fdu);
 }
