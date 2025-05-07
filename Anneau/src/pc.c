@@ -12,6 +12,27 @@
  
 #define IP_addr_PC "127.0.0.1" // Adresse IP des PCs
 
+void init() {
+    
+}
+
+void traitement_token(FDU *fdu, int port_S_courant, int id) {
+
+}
+
+void_traitement_message(FDU *fdu, int port_S_courant, int id) {
+    printf("PC %d : 📨 Le type est Message, je regarde l'adresse:\n", id);
+    fflush(stdout);
+    if (fdu->addr_dest == port_S_courant) {
+        printf("PC %d : ✅ Message reçu de PC precedent : %s\n", id , fdu->message);
+        fflush(stdout);            
+        fdu->type = Token;
+    } else {
+        printf("PC %d : ❌ Le Message n'est pas pour moi\n", id);
+        fflush(stdout);
+    }
+}
+
 void creation(int id, int port_S_courant, int port_S_suivant, FDU *fdu, int nb_boucle) {
     int sock_C, sock_S;
     struct sockaddr_in sa_S_courant, sa_S_suivant, sa_S_precedent;
@@ -52,15 +73,16 @@ void creation(int id, int port_S_courant, int port_S_suivant, FDU *fdu, int nb_b
     sa_S_suivant.sin_addr.s_addr = inet_addr(IP_addr_PC);
     sa_S_suivant.sin_port = htons(port_S_suivant);	
 	
+    // Uniquement pour le 1er message du PC1
 	if ( (port_S_courant == 8000) && (nb_boucle == 1) ) {
         fdu->type = Message;
-        printf("PC %d : j'envoie un message\n", id);
+        printf("PC %d : J'envoie un message\n", id);
 		sendto(sock_C, fdu, sizeof(*fdu), 0, (struct sockaddr *) &sa_S_suivant, taille_sa);
-		nb_boucle--; 
-	}
-		
-	while(1)
-	{
+		nb_boucle = 0; 
+
+    } else {
+        printf("sdlqkflksdlfksd\n");
+        while(1) {
 		// Reception sur Oreille courante
 		recvfrom(sock_S, fdu, sizeof(*fdu), 0, (struct sockaddr *) &sa_S_precedent, &taille_sa);
 		
@@ -101,15 +123,7 @@ void creation(int id, int port_S_courant, int port_S_suivant, FDU *fdu, int nb_b
                 fdu->addr_source = port_S_courant; 
             }
         } else {
-            printf("PC %d : 📨 Le type est Message, je regarde l'adresse:\n", id);
-            fflush(stdout);
-            if (fdu->addr_dest == port_S_courant) {
-                printf("PC %d : ✅ Message reçu de PC precedent : %s\n", id , fdu->message);
-                fflush(stdout);            
-            } else {
-                printf("PC %d : ❌ Le Message n'est pas pour moi\n", id);
-                fflush(stdout);
-            }
+            // traitement_message(&fdu, port_S_courant, id);
         }
 		
 		sleep(1);
@@ -117,7 +131,8 @@ void creation(int id, int port_S_courant, int port_S_suivant, FDU *fdu, int nb_b
 		
 		// Envoi vers PC suivant 
 		sendto(sock_C, fdu, sizeof(*fdu), 0, (struct sockaddr *) &sa_S_suivant, taille_sa);
-	}
+        }
+    }
 	
 	
     //// Fin
