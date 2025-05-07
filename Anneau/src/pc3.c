@@ -12,10 +12,10 @@
 #include "../include/utils.h"
 #include "../include/FDU.h"
 
-int port_S_courant = host1;
-int port_S_suivant = host2;
+int port_S_courant = host2;
+int port_S_suivant = host0;
 
 int main() {
     FDU fdu;
-    config_socket(port_S_courant, port_S_suivant, hostname2, &fdu);
+    config_socket(port_S_courant, port_S_suivant, hostname3, &fdu);
 }
