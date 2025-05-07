@@ -17,12 +17,57 @@
 // }
 
 void traitement_token(FDU *fdu, int port_S_courant, int id) {
+    printf("Le port est : %d, le port du fdu est : %d\n", port_S_courant, fdu->addr_dest);
 
-    
+    printf("PC %d : 🪙 Le type est Token, je passe le FDU\n", id);
+    fflush(stdout);
+
+    char send_mess[3];
+    printf("Voulez-vous envoyer un message (oui/non) ? \n");
+    fflush(stdout);
+    scanf("%s", send_mess);
+
+    if(strcmp(send_mess, "oui") == 0) {
+        // Envoi du message
+        char msg[100];
+        printf("Entrez votre message : \n");
+        fflush(stdout);
+        scanf("%s", msg);
+        fdu->type = Message;
+        strcpy(fdu->message, msg);
+
+        int dest;
+        printf("Entrez votre destinataire (0 / 1 / 2) : \n");
+        fflush(stdout);
+        scanf("%d", &dest);
+        
+        switch (dest) {
+            case 0:
+                dest = 8000; break;
+            case 1:
+                dest = 8001; break;
+            case 2:
+                dest = 8002; break;
+        }
+        
+        fdu->addr_dest = dest;
+        fdu->addr_source = port_S_courant; 
+    }
 }
 
 void traitement_message(FDU *fdu, int port_S_courant, int id) {
-    
+    printf("Le port est : %d, le port du fdu est : %d\n", port_S_courant, fdu->addr_dest);
+
+    printf("PC %d : 📨 Le type est Message, je regarde l'adresse :\n", id);
+    fflush(stdout);
+    if (fdu->addr_dest == port_S_courant) {
+        printf("PC %d : ✅ Message reçu de PC precedent : %s\n", id , fdu->message);
+        fflush(stdout);
+        fdu->type = Token;
+    } else {
+        printf("PC %d : ❌ Le Message n'est pas pour moi\n", id);
+        fflush(stdout);
+    }
 }
 
 void creation(int id, int port_S_courant, int port_S_suivant, FDU *fdu, int nb_boucle) {
@@ -77,66 +122,15 @@ void creation(int id, int port_S_courant, int port_S_suivant, FDU *fdu, int nb_b
         while(1) {
             // Reception sur Oreille courante
             recvfrom(sock_S, fdu, sizeof(*fdu), 0, (struct sockaddr *) &sa_S_precedent, &taille_sa);
-            printf("Message reçu de l'adresse: %s, port: %d\n", inet_ntoa(sa_S_precedent.sin_addr), ntohs(sa_S_precedent.sin_port));
-
             
             // Traitement
             if (fdu->type == Token) {
                 traitement_token(fdu, port_S_courant, id);
-                printf("Le port est : %d, le port du fdu est : %d\n", port_S_courant, fdu->addr_dest);
-
-
-
-                printf("PC %d : 🪙 Le type est Token, je passe le FDU\n", id);
-                fflush(stdout);
-
-                char send_mess[3];
-                printf("Voulez-vous envoyer un message (oui/non) ? \n");
-                fflush(stdout);
-                scanf("%s", send_mess);
-
-                if(strcmp(send_mess, "oui") == 0) {
-                    // Envoi du message
-                    char msg[100];
-                    printf("Entrez votre message : \n");
-                    fflush(stdout);
-                    scanf("%s", msg);
-                    fdu->type = Message;
-                    strcpy(fdu->message, msg);
-
-                    int dest;
-                    printf("Entrez votre destinataire (0 / 1 / 2) : \n");
-                    fflush(stdout);
-                    scanf("%d", &dest);
-                    
-                    switch (dest) {
-                    case 0:
-                        dest = 8000; break;
-                    case 1:
-                        dest = 8001; break;
-                    case 2:
-                        dest = 8002; break;
-                    }
-                    
-                    fdu->addr_dest = dest;
-                    fdu->addr_source = port_S_courant; 
-                }
             } else {
                 traitement_message(fdu, port_S_courant, id);
-                printf("Le port est: %d, le port du fdu est: %d\n", port_S_courant, fdu->addr_dest);
-
-    
-                printf("PC %d : 📨 Le type est Message, je regarde l'adresse:\n", id);
-                fflush(stdout);
-                if (fdu->addr_dest == port_S_courant) {
-                    printf("PC %d : ✅ Message reçu de PC precedent : %s\n", id , fdu->message);
-                    fflush(stdout);            
-                    fdu->type = Token;
-                } else {
-                    printf("PC %d : ❌ Le Message n'est pas pour moi\n", id);
-                    fflush(stdout);
-                }
             }
+
+            printf("PC %d -> Port_courant: %d, Port_suivant: %d\n", id, fdu->addr_source, fdu->addr_dest);
             
             sleep(1);
             printf("\n");
