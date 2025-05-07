@@ -8,3 +8,4 @@
 
 #define hostname1 "PC1"
 #define hostname2 "PC2"
+#define hostname3 "PC3"
