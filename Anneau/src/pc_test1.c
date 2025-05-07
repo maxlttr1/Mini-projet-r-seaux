@@ -10,10 +10,17 @@
 
 #include "../include/constants.h"
 #include "../include/utils.h"
+#include "../include/FDU.h"
 
 int port_S_courant = host0;
 int port_S_suivant = host1;
 
 int main() {
+    FDU fdu;
+    fdu.type = Message;
+    fdu.addr_source = port_S_courant;
+    fdu.addr_dest = port_S_suivant;
+    strcpy(fdu.message, "Salut !");
+
     config_socket(port_S_courant, port_S_suivant, hostname2);
 }

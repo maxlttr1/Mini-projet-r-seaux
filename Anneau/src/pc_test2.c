@@ -10,6 +10,7 @@
 
 #include "../include/constants.h"
 #include "../include/utils.h"
+#include "../include/FDU.h"
 
 int port_S_courant = host1;
 int port_S_suivant = host0;
