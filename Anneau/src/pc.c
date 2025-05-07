@@ -49,7 +49,6 @@ void traitement_token(FDU *fdu, int port_S_courant, int id) {
             case 2:
                 dest = 8002; break;
         }
-        
         fdu->addr_dest = dest;
         fdu->addr_source = port_S_courant; 
     }
@@ -75,7 +74,7 @@ void creation(int id, int port_S_courant, int port_S_suivant, FDU *fdu, int nb_b
     struct sockaddr_in sa_S_courant, sa_S_suivant, sa_S_precedent;
     unsigned int taille_sa;
 	
-    printf("PC %d -> Port_courant: %d, Port_suivant: %d, nb_boucle: %d\n", id, port_S_courant, port_S_suivant, nb_boucle);
+    printf("PC %d -> Port_courant : %d, Port_suivant : %d, nb_boucle : %d\n", id, port_S_courant, port_S_suivant, nb_boucle);
 
     // Taille de la structure sockaddr
     taille_sa = sizeof(struct sockaddr);
@@ -116,28 +115,28 @@ void creation(int id, int port_S_courant, int port_S_suivant, FDU *fdu, int nb_b
         printf("PC %d : J'envoie un message\n", id);
 		sendto(sock_C, fdu, sizeof(*fdu), 0, (struct sockaddr *) &sa_S_suivant, taille_sa);
 		nb_boucle = 0; 
+        sleep(2);
+    } 
+    while(1) {
+        // Reception sur Oreille courante
+        recvfrom(sock_S, fdu, sizeof(*fdu), 0, (struct sockaddr *) &sa_S_precedent, &taille_sa);
+        
+        // Traitement
+        if (fdu->type == Token) {
+            traitement_token(fdu, port_S_courant, id);
 
-    } else {
-        printf("sdlqkflksdlfksd\n");
-        while(1) {
-            // Reception sur Oreille courante
-            recvfrom(sock_S, fdu, sizeof(*fdu), 0, (struct sockaddr *) &sa_S_precedent, &taille_sa);
             
-            // Traitement
-            if (fdu->type == Token) {
-                traitement_token(fdu, port_S_courant, id);
-            } else {
-                traitement_message(fdu, port_S_courant, id);
-            }
-
-            printf("PC %d -> Port_courant: %d, Port_suivant: %d\n", id, fdu->addr_source, fdu->addr_dest);
-            
-            sleep(1);
-            printf("\n");
-            
-            // Envoi vers PC suivant 
-            sendto(sock_C, fdu, sizeof(*fdu), 0, (struct sockaddr *) &sa_S_suivant, taille_sa);
+        } else {
+            traitement_message(fdu, port_S_courant, id);
         }
+
+        printf("PC %d -> Port_source : %d, Port_suivant : %d\n", id, fdu->addr_source, fdu->addr_dest);
+        
+        sleep(1);
+        printf("\n");
+        
+        // Envoi vers PC suivant 
+        sendto(sock_C, fdu, sizeof(*fdu), 0, (struct sockaddr *) &sa_S_suivant, taille_sa);
     }
 	
     //// Fin
@@ -146,4 +145,3 @@ void creation(int id, int port_S_courant, int port_S_suivant, FDU *fdu, int nb_b
 	close(sock_C);
     exit(EXIT_SUCCESS);
 }
-
