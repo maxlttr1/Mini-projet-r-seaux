@@ -75,8 +75,6 @@ void creation(int id, int port_S_courant, int port_S_suivant, FDU *fdu, int nb_b
     struct sockaddr_in sa_S_courant, sa_S_suivant, sa_S_precedent;
     unsigned int taille_sa;
 	
-    printf("PC %d -> Port_courant: %d, Port_suivant: %d, nb_boucle: %d\n", id, port_S_courant, port_S_suivant, nb_boucle);
-
     // Taille de la structure sockaddr
     taille_sa = sizeof(struct sockaddr);
 	
@@ -118,7 +116,6 @@ void creation(int id, int port_S_courant, int port_S_suivant, FDU *fdu, int nb_b
 		nb_boucle = 0; 
 
     } else {
-        printf("sdlqkflksdlfksd\n");
         while(1) {
             // Reception sur Oreille courante
             recvfrom(sock_S, fdu, sizeof(*fdu), 0, (struct sockaddr *) &sa_S_precedent, &taille_sa);
