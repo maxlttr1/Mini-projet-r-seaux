@@ -30,18 +30,20 @@ void traitePaquet(Paquet *p)
 		printf("📥 Le message qui m'est destine : %s \n\n", p->message);
 	
 	}
-	else
+	else {
 		/* sinon */
 		printf("❌ Je ne suis pas le destinataire\n");
 		printf("📥 Message pour %s : %s\n\n", p->adresse, p->message);
+	}
 }
 
-int main (int argc, char **argv) {
+int main () {
 	int socketEmission, socketReception;
 	char buffer[LONGUEUR_ADRESSE + LONGUEUR_MESSAGE];
 	Paquet p;
 	
 	int	sizeofbuffer;
+	sizeofbuffer = (LONGUEUR_ADRESSE + LONGUEUR_MESSAGE)*sizeof(char);
 
 	socketEmission  = creePriseEmission(ADRESSE_DISTANTE, PORT_DISTANT);
     socketReception  = creePriseReception(PORT_LOCAL);
@@ -58,7 +60,7 @@ int main (int argc, char **argv) {
 
         sleep(2);
 
-        memset (buffer, '\0', sizeof(buffer));
+        memset (buffer, '\0', sizeofbuffer);
 		recoit(socketReception, buffer, sizeof(buffer)-1);
 		sscanf(buffer, "%15s%120s", &p.adresse, &p.message);
 		traitePaquet(&p);
