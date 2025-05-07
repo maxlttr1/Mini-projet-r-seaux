@@ -35,6 +35,7 @@ int main()
 
     struct FDU fdu;
 
+    fdu.type = Token;
     fdu.addr_source = 8000;
     fdu.addr_dest = 8001;
     strcpy(fdu.message, "Salut");
