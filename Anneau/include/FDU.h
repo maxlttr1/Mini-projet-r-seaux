@@ -1,5 +1,4 @@
-#ifndef FDU_H
-#define FDU_H
+#pragma once
 
 enum TypeFDU {
     Token, 
@@ -7,10 +6,8 @@ enum TypeFDU {
 };
 
 typedef struct FDU {
-    TypeFDU type;
+    enum TypeFDU type;
     char message[10];
     int addr_source;
     int addr_dest;
-};
-
-#endif
+} FDU;
