@@ -1,7 +1,6 @@
-Exemple-PC1-emetteur-PC2-recepteur.tgz
-PC1-emetteur
-PC2-recepteur
-host
+Echange_entre_2_pc/PC1-emetteur
+Echange_entre_2_pc/PC2-recepteur
+Echange_entre_2_pc/host
 .vscode
 build
 Exemple-PCrecepteur&emetteur/pc1
