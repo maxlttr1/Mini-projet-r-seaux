@@ -7,7 +7,7 @@ enum TypeFDU {
 
 typedef struct FDU {
     enum TypeFDU type;
-    char message[10];
+    char message[100];
     int addr_source;
     int addr_dest;
 } FDU;

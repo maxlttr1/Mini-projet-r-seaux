@@ -12,11 +12,12 @@
  
 #define IP_addr_PC "127.0.0.1" // Adresse IP des PCs
 
-void creation(int port_S_courant, int port_S_suivant, FDU *fdu) {
+void creation(int id, int port_S_courant, int port_S_suivant, FDU *fdu, int nb_boucle) {
     int sock_C, sock_S;
     struct sockaddr_in sa_S_courant, sa_S_suivant, sa_S_precedent;
     unsigned int taille_sa;
-	int nb_boucle = 1;
+	
+    printf("PC %d -> Port_courant: %d, Port_suivant: %d, nb_boucle: %d\n", id, port_S_courant, port_S_suivant, nb_boucle);
 
     // Taille de la structure sockaddr
     taille_sa = sizeof(struct sockaddr);
@@ -49,29 +50,70 @@ void creation(int port_S_courant, int port_S_suivant, FDU *fdu) {
     bzero((char *) &sa_S_suivant, sizeof(struct sockaddr_in));
     sa_S_suivant.sin_family = AF_INET;
     sa_S_suivant.sin_addr.s_addr = inet_addr(IP_addr_PC);
-    sa_S_suivant.sin_port = htons(port_S_suivant);
-
-    
-	//// Amorce (PC port 8000 envoie le 1er message, à ne faire qu'une seule fois)
+    sa_S_suivant.sin_port = htons(port_S_suivant);	
 	
-	
-	if ( (port_S_courant == 8000) && (nb_boucle == 1) )
-	{
+	if ( (port_S_courant == 8000) && (nb_boucle == 1) ) {
+        fdu->type = Message;
+        printf("PC %d : j'envoie un message\n", id);
 		sendto(sock_C, fdu, sizeof(*fdu), 0, (struct sockaddr *) &sa_S_suivant, taille_sa);
 		nb_boucle--; 
 	}
-	
-	
-	//// boucle infinie 
-	
+		
 	while(1)
 	{
 		// Reception sur Oreille courante
 		recvfrom(sock_S, fdu, sizeof(*fdu), 0, (struct sockaddr *) &sa_S_precedent, &taille_sa);
 		
 		// Traitement (ICI : juste affichage)
-		printf("Message reçu de PC precedent : %s\n", fdu->message);
+        if (fdu->type == Token) {
+            printf("PC %d : 🪙 Le type est Token, je passe le FDU\n", id);
+            fflush(stdout);
+
+            char send_mess[3];
+            printf("Voulez-vous envoyer un message (oui/non) ? \n");
+            fflush(stdout);
+            scanf("%s", send_mess);
+
+            if(strcmp(send_mess, "oui") == 0) {
+                // Envoi du message
+                char msg[100];
+                printf("Entrez votre message : \n");
+                fflush(stdout);
+                scanf("%s", msg);
+                fdu->type = Message;
+                strcpy(fdu->message, msg);
+
+                int dest;
+                printf("Entrez votre destinataire (1 / 2 / 3) : \n");
+                fflush(stdout);
+                scanf("%d", &dest);
+                
+                switch (dest) {
+                case 1:
+                    dest = 8000; break;
+                case 2:
+                    dest = 8001; break;
+                case 3:
+                    dest = 8002; break;
+                }
+                
+                fdu->addr_dest = dest;
+                fdu->addr_source = port_S_courant; 
+            }
+        } else {
+            printf("PC %d : 📨 Le type est Message, je regarde l'adresse:\n", id);
+            fflush(stdout);
+            if (fdu->addr_dest == port_S_courant) {
+                printf("PC %d : ✅ Message reçu de PC precedent : %s\n", id , fdu->message);
+                fflush(stdout);            
+            } else {
+                printf("PC %d : ❌ Le Message n'est pas pour moi\n", id);
+                fflush(stdout);
+            }
+        }
+		
 		sleep(1);
+        printf("\n");
 		
 		// Envoi vers PC suivant 
 		sendto(sock_C, fdu, sizeof(*fdu), 0, (struct sockaddr *) &sa_S_suivant, taille_sa);
