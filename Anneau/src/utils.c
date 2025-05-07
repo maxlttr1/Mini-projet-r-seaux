@@ -43,11 +43,11 @@ void traitement_token(FDU *fdu, int port_S_courant) {
         sscanf(dest_str, "%d", &dest);
 
         if (dest == 1) {
-            dest = 8000;
+            dest = host1;
         } else if (dest == 2) {
-            dest = 8001;
+            dest = host2;
         } else if (dest == 3) {
-            dest = 8002;
+            dest = host3;
         }
 
         fdu->addr_dest = dest;
@@ -108,7 +108,7 @@ void config_socket(int port_S_courant, int port_S_suivant, const char *pc_name, 
     sa_S_suivant.sin_port = htons(port_S_suivant);
 
     //// Amorce (le 1er PC envoie le 1er message, à ne faire qu'une seule fois)
-    if ((port_S_courant == host0) && (nb_boucle == 1)) {
+    if ((port_S_courant == host1) && (nb_boucle == 1)) {
         sleep(5);
         printf("🚀 [%s] Envoi du 1er message\n", pc_name);
         fflush(stdout);

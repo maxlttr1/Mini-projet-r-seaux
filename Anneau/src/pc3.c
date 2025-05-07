@@ -12,8 +12,8 @@
 #include "../include/utils.h"
 #include "../include/FDU.h"
 
-int port_S_courant = host2;
-int port_S_suivant = host0;
+int port_S_courant = host3;
+int port_S_suivant = host1;
 
 int main() {
     FDU fdu;
