@@ -1,13 +1,17 @@
-all: pc1 pc2 pc3
+all: main
+CC = gcc
 
-pc1: pc1.c
-	$(CC) -Wall -o $@ $^
+main: src/main.c src/pc.c
+	$(CC) -Wall -o $@.run $^
 
-pc2: pc2.c
-	$(CC) -Wall -o $@ $^
+pc1: src/pc1.c
+	$(CC) -Wall -o $@.run $^
+
+pc2: src/pc2.c
+	$(CC) -Wall -o $@.run $^
 	
-pc3: pc3.c
-	$(CC) -Wall -o $@ $^
+pc3: src/pc3.c
+	$(CC) -Wall -o $@.run $^
 	
 
 

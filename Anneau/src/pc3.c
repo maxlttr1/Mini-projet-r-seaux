@@ -7,9 +7,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "FDU.h"
-
-
 // Formation de la couche basse de l'anneau (emulation couche physique)
 // Chaque PC muni de 2 sockets :
 // -> 1 oreille : socket serveur pour recevoir du PC precedent
@@ -22,8 +19,8 @@
 // 		Executer d'abord les pc2 et pc3, et en dernier le pc1   
  
 #define IP_addr_PC "127.0.0.1" // Adresse IP des PCs
-#define port_S_courant 8000 // Port serveur courant (oreille courante)
-#define port_S_suivant 8001 // Port serveur suivant (oreille suivante)
+#define port_S_courant 8002 // Port serveur courant (oreille courante)
+#define port_S_suivant 8000 // Port serveur suivant (oreille suivante)
 
 int main()
 {
@@ -31,22 +28,7 @@ int main()
     struct sockaddr_in sa_S_courant, sa_S_suivant, sa_S_precedent;
     unsigned int taille_sa;
     char message[10] = "Salut";
-	int nb_boucle = 1;
-
-    struct FDU fdu;
-
-    fdu.type = Token;
-    fdu.addr_source = 8000;
-    fdu.addr_dest = 8001;
-    strcpy(fdu.message, "Salut");
-
-
-    printf("Type: %s\n", fdu.type);
-    printf("Message: %s\n", fdu.message);
-    printf("Source Address: %d\n", fdu.addr_source);
-    printf("Destination Address: %d\n", fdu.addr_dest);
-
-    
+	int nb_boucle = 1;  
 
 
     // Taille de la structure sockaddr
