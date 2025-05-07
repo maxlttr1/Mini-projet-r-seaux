@@ -1,8 +1,13 @@
 #ifndef FDU_H
 #define FDU_H
 
+enum TypeFDU {
+    Token, 
+    Message
+};
+
 typedef struct FDU {
-    char type[10];
+    TypeFDU type;
     char message[10];
     int addr_source;
     int addr_dest;
