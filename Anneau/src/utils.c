@@ -54,6 +54,7 @@ void config_socket(int port_S_courant, int port_S_suivant, const char *pc_name, 
 
     //// Amorce (le 1er PC envoie le 1er message, à ne faire qu'une seule fois)
     if ((port_S_courant == host0) && (nb_boucle == 1)) {
+        sleep(5);
         printf("🚀 [%s] Sending first message\n", pc_name);
         fflush(stdout);
 
