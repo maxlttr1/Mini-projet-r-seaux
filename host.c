@@ -19,10 +19,7 @@ typedef struct paquet
 	char message[LONGUEUR_MESSAGE];
 } Paquet;
 
-void traitePaquet(Paquet *p)
-{
-	char buffer[LONGUEUR_MESSAGE];
-
+void traitePaquet(Paquet *p) {
 	if (strcmp(ADRESSE_LOCALE, p->adresse) == 0)
 	/* si je suis le destinataire du paquet */
 	{
