@@ -11,7 +11,6 @@ static const int ports[] = {8000, 8001, 8002};
 
 int main() {
     FDU fdu;
-
     fdu.type = Message;
     fdu.addr_source = ports[0];
     fdu.addr_dest = ports[1];
