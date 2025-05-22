@@ -12,9 +12,10 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "../include/constants.h"
-#include "../include/FDU.h"
+#include "../include/constants.h" // Définitions des constantes comme host1, host2
+#include "../include/FDU.h"  // Structure FDU utilisée pour transporter les messages et les jetons
 
+// Fonction appelée lorsqu'on reçoit un jeton (type == Token): permet à l'utilisateur d'envoyer un message s'il le souhaite
 void traitement_token(FDU *fdu, int port_S_courant) {
     printf("🪙 Le type est Token\n");
     fflush(stdout);
@@ -32,9 +33,11 @@ void traitement_token(FDU *fdu, int port_S_courant) {
         fgets(msg, sizeof(msg), stdin);
         msg[strcspn(msg, "\n")] = 0;
 
+        // Préparation de la structure FDU pour l'envoi du message
         fdu->type = Message;
         strcpy(fdu->message, msg);
 
+        // Saisie du destinataire
         char dest_str[10];
         int dest;
         printf("Entrez votre destinataire (1 / 2 / 3) : \n");
@@ -42,6 +45,7 @@ void traitement_token(FDU *fdu, int port_S_courant) {
         fgets(dest_str, sizeof(dest_str), stdin);
         sscanf(dest_str, "%d", &dest);
 
+        // Conversion logique du numéro de destinataire en port
         if (dest == 1) {
             dest = host1;
         } else if (dest == 2) {
@@ -56,6 +60,7 @@ void traitement_token(FDU *fdu, int port_S_courant) {
 
 }
 
+// Fonction appelée lorsqu'on reçoit un message: vérifie si le message est destiné à ce PC
 void traitement_message(FDU *fdu, int port_S_courant) {
     printf("📨 Le type est Message, je regarde l'adresse :\n");
     fflush(stdout);
@@ -70,6 +75,7 @@ void traitement_message(FDU *fdu, int port_S_courant) {
     }
 }
 
+// Configuration des sockets UDP pour la communication entre les PC: gère à la fois l'écoute et l'envoi des messages
 void config_socket(int port_S_courant, int port_S_suivant, const char *pc_name, FDU *fdu) {
     int sock_C, sock_S;
     struct sockaddr_in sa_S_courant, sa_S_suivant, sa_S_precedent;
@@ -81,7 +87,7 @@ void config_socket(int port_S_courant, int port_S_suivant, const char *pc_name, 
     
     //// Création de l'oreille (c.a.d socket serveur courant)
     
-    // le socket UDP
+    //// Création du socket serveur (pour écouter les messages entrants)
     sock_S = socket(PF_INET, SOCK_DGRAM, 0); // UDP
     perror("🔌 socket");
 
@@ -95,9 +101,7 @@ void config_socket(int port_S_courant, int port_S_suivant, const char *pc_name, 
     bind(sock_S, (struct sockaddr *) &sa_S_courant, sizeof(struct sockaddr));
     perror("🔗 bind");
     
-    //// Création de la bouche (c.a.d parle au serveur suivant)
-
-    // le socket UDP, n° port quelconque 
+    //// Création du socket client (pour envoyer les messages au suivant)
     sock_C = socket(PF_INET, SOCK_DGRAM, 0);
     perror("🗣️ socket");
     
@@ -122,7 +126,7 @@ void config_socket(int port_S_courant, int port_S_suivant, const char *pc_name, 
         nb_boucle--; 
     }
 
-    //// Boucle infinie 
+    //// Boucle principale : écoute, traitement, réémission
     while(1) {
         printf("🔄 [%s] En attente d'un message...\n", pc_name);
         fflush(stdout);
@@ -131,7 +135,7 @@ void config_socket(int port_S_courant, int port_S_suivant, const char *pc_name, 
             perror("❌ recvfrom failed");
         }
 
-        // Traitement
+        // Appel du bon traitement selon le type
         if (fdu->type == Token) {
             traitement_token(fdu, port_S_courant);
         } else {
@@ -148,7 +152,7 @@ void config_socket(int port_S_courant, int port_S_suivant, const char *pc_name, 
         }
     }
 
-    //// Fin
+    //// Libération des sockets
     close(sock_S);
     close(sock_C);
     exit(EXIT_SUCCESS);
